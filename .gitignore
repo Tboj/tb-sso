@@ -1,5 +1,6 @@
 HELP.md
-/target/
+# 忽略文件夹前面不能有 /
+target/
 !.mvn/wrapper/maven-wrapper.jar
 
 ### STS ###
