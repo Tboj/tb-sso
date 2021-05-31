@@ -24,8 +24,8 @@ import cn.jtb.security.core.validator.code.VerificationCodeGenerator;
 @Component
 public class ImageVerificationCodeProcessor extends AbstractVerificationCodeProcessor<ImageCode> {
 
-    public ImageVerificationCodeProcessor(@Qualifier("imageCodeValidatorGenerator") VerificationCodeGenerator<ImageCode> imageCodeValidatorGenerator) {
-        this.verificationCodeGenerator = imageCodeValidatorGenerator;
+    public ImageVerificationCodeProcessor(VerificationCodeGenerator<ImageCode> verificationCodeGenerator) {
+        super(verificationCodeGenerator);
     }
 
     @Override

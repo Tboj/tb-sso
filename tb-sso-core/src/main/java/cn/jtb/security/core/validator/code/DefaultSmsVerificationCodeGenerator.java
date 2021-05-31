@@ -18,7 +18,6 @@ public class DefaultSmsVerificationCodeGenerator implements VerificationCodeGene
 
     @Autowired
     private SecurityProperties securityProperties;
-    public static final String SPRING_SECURITY_SMS_VERIFICATION_CODE = "SPRING_SECURITY_IMAGE_SMS_CODE";
 
     @Override
     public VerificationCode generateCode(HttpServletRequest request) {

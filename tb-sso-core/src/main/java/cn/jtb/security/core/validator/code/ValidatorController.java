@@ -17,6 +17,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import cn.jtb.security.core.validator.code.image.ImageVerificationCodeProcessor;
+import cn.jtb.security.core.validator.code.sms.SmsVerificationCodeProcessor;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author jtb
@@ -24,46 +26,26 @@ import cn.jtb.security.core.validator.code.image.ImageVerificationCodeProcessor;
  * @description
  */
 @RestController
-//@Slf4j
+@Slf4j
 public class ValidatorController {
-    private static final Logger log = LoggerFactory.getLogger(ValidatorController.class);
-
-    @Resource(name = "imageCodeValidatorGenerator")
-    private VerificationCodeGenerator<ImageCode> imageCodeValidatorGenerator;
-
-    @Resource(name = "smsCodeValidatorGenerator")
-    private VerificationCodeGenerator<VerificationCode> smsCodeValidatorGenerator;
 
     @Autowired
     private ImageVerificationCodeProcessor imageVerificationCodeProcessor;
 
+
     @Autowired
-    private SmsCodeSender smsCodeSender;
+    private SmsVerificationCodeProcessor smsVerificationCodeProcessor;
 
     @RequestMapping("/validate/image/code")
     public void imageValidateCode(ServletWebRequest servletWebRequest) throws IOException {
         HttpServletResponse response = servletWebRequest.getResponse();
         setImgResponseContentType(response);
         imageVerificationCodeProcessor.create(servletWebRequest);
-        //HttpSession session = request.getSession();
-        //// 1.生成验证码
-        //ImageCode imageCode = imageCodeValidatorGenerator.generateCode(request);
-        //// 2.写到session
-        //session.setAttribute(DefaultImageVerificationCodeGenerator.SPRING_SECURITY_IMAGE_VERIFICATION_CODE, imageCode);
-        //// 3.发送，写到流里
-        //ImageIO.write(imageCode.getImage(), "JPEG", response.getOutputStream());
     }
 
     @RequestMapping("/validate/sms/code")
-    public void smsValidateCode(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        HttpSession session = request.getSession();
-        // 1.生成验证码
-        VerificationCode imageCode = smsCodeValidatorGenerator.generateCode(request);
-        // 2.写到session
-        session.setAttribute(DefaultSmsVerificationCodeGenerator.SPRING_SECURITY_SMS_VERIFICATION_CODE, imageCode);
-        // 3.发送，服务商的发送
-        String mobile = request.getParameter("mobile");
-        smsCodeSender.send(mobile, imageCode.getCode());
+    public void smsValidateCode(ServletWebRequest servletWebRequest) throws IOException {
+        smsVerificationCodeProcessor.create(servletWebRequest);
     }
 
     private void setImgResponseContentType(HttpServletResponse response) {

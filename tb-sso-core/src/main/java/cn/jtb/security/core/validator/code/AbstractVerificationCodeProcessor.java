@@ -10,6 +10,10 @@ public abstract class AbstractVerificationCodeProcessor<C extends VerificationCo
 
     protected VerificationCodeGenerator<C> verificationCodeGenerator;
 
+    public AbstractVerificationCodeProcessor(VerificationCodeGenerator<C> verificationCodeGenerator) {
+        this.verificationCodeGenerator = verificationCodeGenerator;
+    }
+
     @Override
     public C create(ServletWebRequest servletWebRequest) {
         if (verificationCodeGenerator == null) {
